@@ -1,5 +1,5 @@
 function getHumanChoice() {
-    let choice = prompt('Choose one (Rock, Paper, Scissors): ')
+    let choice = ('Choose one (Rock, Paper, Scissors): ')
     return choice
 }
 
@@ -23,59 +23,92 @@ function getComputerChoice() {
 
 function playRound(playerChoice, computerChoice) {    
 //Decidir quem ganha
+let answer
+let winnerData = []
 let winner
     if (playerChoice == computerChoice) 
     {
-        console.log(`You both chose ${playerChoice}`);
+        answer = `You both chose ${playerChoice}`
         winner = 'tie'
+        winnerData.push(answer);
+        winnerData.push(winner)
+    
     }
     if (playerChoice == 'Paper' && computerChoice == 'Rock' || playerChoice == 'Rock' && computerChoice == 'Scissors' || playerChoice == 'Scissors' && computerChoice == 'Paper') 
     {
-        console.log(`Human chose ${playerChoice} and computer ${computerChoice}, human wins!`);    
-        winner = 'human'
+       answer = `Human chose ${playerChoice} and computer ${computerChoice}, human wins!` 
+       winner = 'human'  
+       winnerData.push(answer);
+       winnerData.push(winner)
     }
     if (computerChoice == 'Paper' && playerChoice == 'Rock' || computerChoice == 'Rock' && playerChoice == 'Scissors' || computerChoice == 'Scissors' && playerChoice == 'Paper') 
     {
-        console.log(`Human chose ${playerChoice} and computer ${computerChoice}, computer wins!`);    
+        answer = `Human chose ${playerChoice} and computer ${computerChoice}, computer wins!` 
         winner = 'computer'
+        winnerData.push(answer);
+        winnerData.push(winner)   
+        
     }
-    return winner
+    return winnerData
 }
-
-function showWinner(computer, human) {
-    if (computer > human) {
-        console.log('Computer won it');
-    }else if (human > computer) {
-        console.log('Human won it');
-    }else{
-        console.log('You tied');
-    }
-}
-
-
+   
+//recuperar botoes e respostas
+const buttonPlayRound = document.querySelector('#button_play');
+const containerContador = document.querySelector('#contador_id');
 let contHuman = 0;
 let contComputer = 0;
-//Repetir isso 5 vezes
-for (let i = 0; i < 5; i++) {
 
-    //Pegar resposta do humano
-    const humanChoice = getHumanChoice();
-    //Pegar resposta do Robo
-    const computerChoice = getComputerChoice();
-    //Jogar um round
-    let winner = playRound(humanChoice, computerChoice)
-    switch (winner) {
-        case 'human':
-            contHuman++;
-            break;
-        case 'computer': 
-            contComputer++
-        case 'tie':
-            break;
-    }
-    console.log(`Human: ${contHuman} | Computer: ${contComputer}`);
-}
-
-showWinner(contComputer, contHuman)
+buttonPlayRound.addEventListener("click", () => {
     
-//contar um placar
+    
+
+    if (contHuman > 4 || contComputer > 4 )
+    {
+        if(contHuman >= 4 )
+        {
+            alert("Game finished!! Human wins")
+        }
+        else if(contComputer >= 4)
+        {
+            alert("Game finished!! Computer wins")
+        }
+        contHuman = 0;
+        contComputer = 0;
+        let answer = ""
+        let score = `Human: ${0} | Computer: ${0}`
+        answerText.innerHTML = `<h2>${answer}</h2>`
+        containerContador.innerHTML = `<h2>${score}</h2>`
+    }
+    else
+    {     
+        const elementChecked = document.querySelector('input[name="game_selection"]:checked');
+        const answerText = document.querySelector('#results');
+        const computerChoice = getComputerChoice();
+        
+        if(elementChecked)
+        {
+        playerChoice = elementChecked.value;
+        }
+        else 
+        {
+        alert("Nothing selected");
+        }
+
+        let answer = playRound(playerChoice, computerChoice)
+        let score = `Human: ${contHuman} | Computer: ${contComputer}`
+
+        switch (answer[1]) {
+            case 'human':
+                contHuman++;
+                break;
+            case 'computer':
+                contComputer++;
+            default:
+                break;
+        }
+        console.log(`Human: ${contHuman} | Computer: ${contComputer} `);
+        answerText.innerHTML = `<h2>${answer[0]}</h2>`
+        containerContador.innerHTML = `<h2>${score}</h2>`
+    }
+})
+//checar o input radio usando log
